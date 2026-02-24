@@ -4,7 +4,7 @@
 
 Self-contained lightweight component level router for Vue 3 Single Page Applications.
 
-Built using `rou3` for efficient route matching and navigation.
+Built using [h3js/rou3](https://github.com/h3js/rou3) for efficient route matching and navigation.
 
 ## Installation
 
