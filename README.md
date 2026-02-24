@@ -10,11 +10,11 @@ Built using `rou3` for efficient route matching and navigation.
 
 ```bash
 # Using npm
-npm install pod-router
+npm install @booploops/pod-router
 # Using yarn
-yarn add pod-router
+yarn add @booploops/pod-router
 # Using pnpm
-pnpm add pod-router
+pnpm add @booploops/pod-router
 ```
 
 ## Documentation (WIP)
