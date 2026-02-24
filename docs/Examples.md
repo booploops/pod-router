@@ -2,7 +2,7 @@
 
 ```vue
 <script setup lang="ts">
-import { PodRouter, type Route } from "pod-router";
+import { PodRouter, type Route } from "@booploops/pod-router";
 import HomePage from "./views/HomePage.vue";
 import UserPage from "./views/UserPage.vue";
 
@@ -32,7 +32,7 @@ const routes: Route[] = [
 
 ```vue
 <script setup lang="ts">
-import { PodRouter, type Route } from "pod-router";
+import { PodRouter, type Route } from "@booploops/pod-router";
 import HomePage from "./views/HomePage.vue";
 import UserPage from "./views/UserPage.vue";
 
@@ -71,7 +71,7 @@ const routes: Route[] = [
 
 ```vue
 <script setup lang="ts">
-import { useRoute } from "pod-router";
+import { useRoute } from "@booploops/pod-router";
 
 const route = useRoute();
 </script>
@@ -90,7 +90,7 @@ You can lazy-load route components using dynamic imports for better performance 
 
 ```vue
 <script setup lang="ts">
-import { PodRouter, type Route } from "pod-router";
+import { PodRouter, type Route } from "@booploops/pod-router";
 
 const routes: Route[] = [
   {
@@ -121,7 +121,7 @@ This example demonstrates using `route.meta` for metadata (like page titles and 
 
 ```vue
 <script setup lang="ts">
-import { PodRouter, useRoute, type Route } from "pod-router";
+import { PodRouter, useRoute, type Route } from "@booploops/pod-router";
 import { watch } from "vue";
 import Dashboard from "./views/Dashboard.vue";
 import Settings from "./views/Settings.vue";
@@ -204,7 +204,7 @@ defineProps<{
 
 ```vue
 <script setup lang="ts">
-import { useRoute } from "pod-router";
+import { useRoute } from "@booploops/pod-router";
 
 // Props from route.props (merged with params)
 defineProps<{

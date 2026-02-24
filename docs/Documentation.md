@@ -103,7 +103,7 @@ The `useRoute` composable provides access to the current route information and n
 ## Usage
 
 ```javascript
-import { useRoute } from 'pod-router';
+import { useRoute } from '@booploops/pod-router';
 
 const route = useRoute();
 ```
