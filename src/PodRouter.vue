@@ -346,6 +346,9 @@ function useRoute(): UseRouteReturn {
       return matchedRoute.value?.params || {};
     },
     get path() {
+      return extractPathname(currentPath.value);
+    },
+    get fullPath() {
       return currentPath.value;
     },
     get meta() {

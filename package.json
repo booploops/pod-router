@@ -1,7 +1,7 @@
 {
   "name": "@booploops/pod-router",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A self-contained component level router for Vue.js Single Page Applications.",
   "author": "booploops",
   "license": "ISC",

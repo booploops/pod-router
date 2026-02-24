@@ -18,7 +18,14 @@ export type Route = {
 export type UseRouteReturn = {
   currentRoute: Route | null;
   params: Record<string, string>;
+  /**
+   * Path of the current route, e.g. "/dashboard/profile/123"
+   */
   path: string;
+  /**
+   * Entire path including query and hash, e.g. "/dashboard/profile/123?tab=info#section1"
+   */
+  fullPath: string;
   meta: Record<string, any>;
   query: Record<string, string>;
   hash?: string;
