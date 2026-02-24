@@ -5,6 +5,14 @@ export type Route = {
   name?: string;
   component: Component | (() => Promise<any>);
   children?: Route[];
+  /**
+   * Component props passed to the route component. Can be an object or a function that returns an object.
+   */
+  props?: Record<string, any> | ((route: Route) => Record<string, any>);
+  /**
+   * Arbitrary metadata that can be attached to the route. This can be used for things like route guards, titles, etc.
+   */
+  meta?: Record<string, any>;
 };
 
 export type UseRouteReturn = {

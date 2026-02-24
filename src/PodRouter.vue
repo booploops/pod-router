@@ -349,8 +349,7 @@ function useRoute(): UseRouteReturn {
       return currentPath.value;
     },
     get meta() {
-      // For now, return empty meta object. Could be extended to include route meta
-      return {};
+      return matchedRoute.value?.meta || {};
     },
     get query() {
       return parseQuery(currentPath.value);
@@ -436,6 +435,8 @@ const matchedRoute = computed(() => {
       name: route.name,
       path: route.path,
       children: route.children,
+      meta: route.meta,
+      props: route.props,
     };
   }
 
@@ -460,10 +461,39 @@ const matchedRoute = computed(() => {
       name: fallbackRoute.name,
       path: fallbackRoute.path,
       children: fallbackRoute.children,
+      meta: fallbackRoute.meta,
+      props: fallbackRoute.props,
     };
   }
 
   return null;
+});
+
+// Compute the props to apply to the component based on route.props
+const componentProps = computed(() => {
+  if (!matchedRoute.value) return {};
+  
+  const routeProps = matchedRoute.value.props;
+  if (!routeProps) {
+    // If no props defined, only pass params
+    return matchedRoute.value.params;
+  }
+  
+  // If props is a function, call it with the route
+  if (typeof routeProps === 'function') {
+    const route: Route = {
+      path: matchedRoute.value.path,
+      name: matchedRoute.value.name,
+      component: matchedRoute.value.component,
+      children: matchedRoute.value.children,
+      meta: matchedRoute.value.meta,
+      props: matchedRoute.value.props,
+    };
+    return { ...matchedRoute.value.params, ...routeProps(route) };
+  }
+  
+  // If props is an object, merge it with params
+  return { ...matchedRoute.value.params, ...routeProps };
 });
 
 // Emit route-change event when route changes
@@ -475,6 +505,8 @@ watch(matchedRoute, (newRoute, oldRoute) => {
       name: newRoute.name,
       component: newRoute.component,
       children: newRoute.children,
+      meta: newRoute.meta,
+      props: newRoute.props,
     };
 
     const from: Route = {
@@ -482,6 +514,8 @@ watch(matchedRoute, (newRoute, oldRoute) => {
       name: oldRoute.name,
       component: oldRoute.component,
       children: oldRoute.children,
+      meta: oldRoute.meta,
+      props: oldRoute.props,
     };
 
     emits('beforeRouteChange', to, from);
@@ -493,6 +527,8 @@ watch(matchedRoute, (newRoute, oldRoute) => {
       name: newRoute.name,
       component: newRoute.component,
       children: newRoute.children,
+      meta: newRoute.meta,
+      props: newRoute.props,
     };
 
     emits('beforeRouteChange', to, null);
@@ -538,11 +574,11 @@ onUnmounted(() => {
   <slot
     v-if="matchedRoute"
     :Component="matchedRoute.component"
-    :route="{ name: matchedRoute.name, path: currentPath, params: matchedRoute.params, key: `${currentPath}-${reloadCounter}` }"
+    :route="{ name: matchedRoute.name, path: currentPath, params: matchedRoute.params, meta: matchedRoute.meta, key: `${currentPath}-${reloadCounter}` }"
   >
     <component
       :is="matchedRoute.component"
-      v-bind="matchedRoute.params"
+      v-bind="componentProps"
       :key="`${currentPath}-${reloadCounter}`"
     />
   </slot>
