@@ -5,8 +5,11 @@
 import { PodRouter, type Route } from "@booploops/pod-router";
 import HomePage from "./views/HomePage.vue";
 import UserPage from "./views/UserPage.vue";
+import { ref } from "vue";
 
 const historyType: "hash" | "memory" | "history" = "memory";
+
+const currentRoute = ref('/');
 
 /**
  * Defining our routes
@@ -24,7 +27,7 @@ const routes: Route[] = [
 </script>
 
 <template>
-  <PodRouter :routes="routes" :history="historyType" />
+  <PodRouter :routes="routes" :history="historyType" v-model="currentRoute" />
 </template>
 ```
 
@@ -36,6 +39,8 @@ import { PodRouter, type Route } from "@booploops/pod-router";
 import HomePage from "./views/HomePage.vue";
 import UserPage from "./views/UserPage.vue";
 
+const currentRoute = ref('/');
+
 /**
  * Defining our routes
  */
@@ -45,7 +50,7 @@ const routes: Route[] = [
 </script>
 
 <template>
-  <PodRouter :routes="routes" history="memory">
+  <PodRouter :routes="routes" history="memory" v-model="currentRoute">
     <template #default="{ Component, route }">
       <transition name="fade" mode="out-in">
         <component :is="Component" v-bind="route.params" :key="route.key" />
