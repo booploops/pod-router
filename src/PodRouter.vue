@@ -447,12 +447,12 @@ const matchedRoute = computed(() => {
   const fallbackRoute = props.routes.find(r => r.path === '*');
   if (fallbackRoute) {
     let component = fallbackRoute.component;
-    
+
     // Handle async components (lazy loading)
     if (typeof component === 'function' && !isVNode(component)) {
       component = defineAsyncComponent(component as () => Promise<any>);
     }
-    
+
     component = markRaw(component);
     const wrappedComponent = isVNode(component)
       ? markRaw({ render: () => component })
@@ -475,13 +475,13 @@ const matchedRoute = computed(() => {
 // Compute the props to apply to the component based on route.props
 const componentProps = computed(() => {
   if (!matchedRoute.value) return {};
-  
+
   const routeProps = matchedRoute.value.props;
   if (!routeProps) {
     // If no props defined, only pass params
     return matchedRoute.value.params;
   }
-  
+
   // If props is a function, call it with the route
   if (typeof routeProps === 'function') {
     const route: Route = {
@@ -494,7 +494,7 @@ const componentProps = computed(() => {
     };
     return { ...matchedRoute.value.params, ...routeProps(route) };
   }
-  
+
   // If props is an object, merge it with params
   return { ...matchedRoute.value.params, ...routeProps };
 });
@@ -578,6 +578,7 @@ onUnmounted(() => {
     v-if="matchedRoute"
     :Component="matchedRoute.component"
     :route="{ name: matchedRoute.name, path: currentPath, params: matchedRoute.params, meta: matchedRoute.meta, key: `${currentPath}-${reloadCounter}` }"
+    :props="componentProps"
   >
     <component
       :is="matchedRoute.component"
