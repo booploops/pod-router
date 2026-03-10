@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@booploops/pod-router':
-        specifier: ../
-        version: link:..
+        specifier: ^0.1.3
+        version: 0.1.3(vue@3.5.30)
     devDependencies:
       vitepress:
         specifier: 2.0.0-alpha.16
@@ -34,6 +34,11 @@ packages:
   '@babel/types@7.29.0':
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
+
+  '@booploops/pod-router@0.1.3':
+    resolution: {integrity: sha512-bljxT642CcCQ/znvVT+nqVmNfT14qxeGYKxCdc8m5M0HcdwprbxQcIV1R71p3i1t68xGHk2fcufCHp3gTbdf1A==}
+    peerDependencies:
+      vue: ^3.0.0
 
   '@docsearch/css@4.6.0':
     resolution: {integrity: sha512-YlcAimkXclvqta47g47efzCM5CFxDwv2ClkDfEs/fC/Ak0OxPH2b3czwa4o8O1TRBf+ujFF2RiUwszz2fPVNJQ==}
@@ -636,6 +641,9 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
+  rou3@0.7.12:
+    resolution: {integrity: sha512-iFE4hLDuloSWcD7mjdCDhx2bKcIsYbtOTpfH5MHHLSKMOUyjqQXTeZVa289uuwEGEKFoE/BAPbhaU4B774nceg==}
+
   shiki@3.23.0:
     resolution: {integrity: sha512-55Dj73uq9ZXL5zyeRPzHQsK7Nbyt6Y10k5s7OjuFZGMhpp4r/rsLBH0o/0fstIzX1Lep9VxefWljK/SKCzygIA==}
 
@@ -760,6 +768,11 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
+
+  '@booploops/pod-router@0.1.3(vue@3.5.30)':
+    dependencies:
+      rou3: 0.7.12
+      vue: 3.5.30
 
   '@docsearch/css@4.6.0': {}
 
@@ -1272,6 +1285,8 @@ snapshots:
       '@rollup/rollup-win32-x64-gnu': 4.59.0
       '@rollup/rollup-win32-x64-msvc': 4.59.0
       fsevents: 2.3.3
+
+  rou3@0.7.12: {}
 
   shiki@3.23.0:
     dependencies:

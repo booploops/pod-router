@@ -17,6 +17,6 @@
     "vitepress": "2.0.0-alpha.16"
   },
   "dependencies": {
-    "@booploops/pod-router": "../"
+    "@booploops/pod-router": "^0.1.3"
   }
 }
