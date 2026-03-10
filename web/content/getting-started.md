@@ -20,6 +20,10 @@ pnpm add @booploops/pod-router
 yarn add @booploops/pod-router
 ```
 
+```bash [bun]
+bun add @booploops/pod-router
+```
+
 :::
 
 Make sure you also have `vue` installed as it is a peer dependency (Vue 3+ is required).

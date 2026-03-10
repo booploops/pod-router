@@ -2,7 +2,6 @@
     <img width="945" height="250" alt="pod-router Banner" src="https://github.com/user-attachments/assets/cf9ff07f-89b4-4f5d-9e9b-dfa87c17c94f" />
 </p>
 
-
 # pod-router
 
 **This project is still in early development.**
@@ -20,6 +19,8 @@ npm install @booploops/pod-router
 yarn add @booploops/pod-router
 # Using pnpm
 pnpm add @booploops/pod-router
+# Using bun
+bun add @booploops/pod-router
 ```
 
 ## Documentation (WIP)
@@ -49,9 +50,10 @@ pnpm add @booploops/pod-router
 - **Lightweight Routing**: Perfect for projects that need a simple routing solution without the overhead of a full-featured router like Vue Router.
 
 ## 🚦 Roadmap
+
 - [ ] Implement scroll tracking and restoration on route changes.
 - [ ] Add support for using parent routes as layout components (similar to Vue Router's nested routes).
-    - Possibly as an explicit `layout` property on route definitions that wraps the route component.
+  - Possibly as an explicit `layout` property on route definitions that wraps the route component.
 
 ## Development
 
@@ -74,4 +76,5 @@ pnpm run build
 ```
 
 ## License
+
 This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
