@@ -21,6 +21,7 @@ export default defineConfig({
           { text: "Getting Started", link: "/getting-started" },
           { text: "&lt;PodRouter&gt;", link: "/pod-router" },
           { text: "useRoute", link: "/use-route" },
+          { text: "Code Examples", link: "/examples" },
           { text: "Types", link: "/types" },
         ],
       },

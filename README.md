@@ -28,7 +28,7 @@ bun add @booploops/pod-router
 <p>
     <ul>
         <li><a href="https://booploops.github.io/pod-router/">Documentation</a></li>
-        <li><a href="docs/Examples.md">Code Examples</a></li>
+        <li><a href="https://booploops.github.io/pod-router/examples">Code Examples</a></li>
     </ul>
 </p>
 
