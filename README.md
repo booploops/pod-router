@@ -60,19 +60,19 @@ bun add @booploops/pod-router
 - Install dependencies:
 
 ```bash
-pnpm install
+yarn install
 ```
 
 - Run the playground:
 
 ```bash
-pnpm run play
+yarn play
 ```
 
 - Build the library:
 
 ```bash
-pnpm run build
+yarn build
 ```
 
 ## License

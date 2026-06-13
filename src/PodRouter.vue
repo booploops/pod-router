@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch, isVNode, provide, markRaw, defineAsyncComponent } from "vue";
+import { ref, readonly, computed, onMounted, onUnmounted, watch, isVNode, provide, markRaw, defineAsyncComponent } from "vue";
 import { createRouter, addRoute, findRoute } from "rou3";
 import type { PodRouterProps, Route, UseRouteReturn } from "./types";
 
@@ -72,7 +72,7 @@ registerRoutes(props.routes);
 // Watch for route changes and re-register
 watch(() => props.routes, (newRoutes) => {
   registerRoutes(newRoutes);
-}, { deep: true });
+});
 
 // Get initial path based on history mode
 const getInitialPath = (): string => {
@@ -162,13 +162,19 @@ if (props.history === 'memory') {
 
   // Sync internal path changes back to v-model and manage history
   watch(currentPath, (newPath) => {
-    if (currentRoute.value !== newPath) {
-      currentRoute.value = newPath;
-    }
+    // Latch-and-clear the flags FIRST so an exception thrown later in
+    // this callback (the v-model sync emits synchronously into parent
+    // code) can never strand isNavigatingHistory/isReplacing as true —
+    // a stuck isNavigatingHistory silently drops every subsequent
+    // v-model navigation and deadlocks the router.
+    const fromHistoryNav = isNavigatingHistory.value;
+    const replacing = isReplacing.value;
+    isNavigatingHistory.value = false;
+    isReplacing.value = false;
 
     // Update history stack (only for non-history navigations)
-    if (!isNavigatingHistory.value) {
-      if (isReplacing.value) {
+    if (!fromHistoryNav) {
+      if (replacing) {
         // Replace current history entry
         if (historyIndex.value >= 0) {
           historyStack.value[historyIndex.value] = newPath;
@@ -176,7 +182,7 @@ if (props.history === 'memory') {
           historyStack.value.push(newPath);
           historyIndex.value = 0;
         }
-      } else {
+      } else if (historyStack.value[historyIndex.value] !== newPath) {
         // Remove any forward history when navigating to a new path
         historyStack.value = historyStack.value.slice(0, historyIndex.value + 1);
         historyStack.value.push(newPath);
@@ -184,8 +190,10 @@ if (props.history === 'memory') {
       }
     }
 
-    isNavigatingHistory.value = false;
-    isReplacing.value = false;
+    // v-model sync LAST — the only line that can throw into app code.
+    if (currentRoute.value !== newPath) {
+      currentRoute.value = newPath;
+    }
   });
 } else if (props.history === 'history') {
   // HTML5 History mode: sync internal path changes to window.history
@@ -241,6 +249,22 @@ if (props.history === 'memory') {
   }
 }
 
+const canGoBack = computed(() => {
+  if (props.history !== 'memory') return false;
+  for (let i = historyIndex.value - 1; i >= 0; i--) {
+    if (historyStack.value[i] !== currentPath.value) return true;
+  }
+  return false;
+});
+
+const canGoForward = computed(() => {
+  if (props.history !== 'memory') return false;
+  for (let i = historyIndex.value + 1; i < historyStack.value.length; i++) {
+    if (historyStack.value[i] !== currentPath.value) return true;
+  }
+  return false;
+});
+
 // Navigation functions for memory mode
 const back = () => {
   if (props.history !== 'memory') {
@@ -248,12 +272,19 @@ const back = () => {
     return;
   }
 
-  if (historyIndex.value > 0) {
-    isNavigatingHistory.value = true;
-    historyIndex.value--;
-    currentPath.value = historyStack.value[historyIndex.value];
-    emits('back');
+  // Skip entries equal to the current path: assigning an equal value to
+  // currentPath would never trigger the watcher, leaving
+  // isNavigatingHistory stuck true (permanent deadlock). Only set the
+  // flag once a genuinely different target is found.
+  let target = historyIndex.value - 1;
+  while (target >= 0 && historyStack.value[target] === currentPath.value) {
+    target--;
   }
+  if (target < 0) return;
+  isNavigatingHistory.value = true;
+  historyIndex.value = target;
+  currentPath.value = historyStack.value[target];
+  emits('back');
 };
 
 const forward = () => {
@@ -262,12 +293,15 @@ const forward = () => {
     return;
   }
 
-  if (historyIndex.value < historyStack.value.length - 1) {
-    isNavigatingHistory.value = true;
-    historyIndex.value++;
-    currentPath.value = historyStack.value[historyIndex.value];
-    emits('forward');
+  let target = historyIndex.value + 1;
+  while (target < historyStack.value.length && historyStack.value[target] === currentPath.value) {
+    target++;
   }
+  if (target >= historyStack.value.length) return;
+  isNavigatingHistory.value = true;
+  historyIndex.value = target;
+  currentPath.value = historyStack.value[target];
+  emits('forward');
 };
 
 const navigate = (options: string | { url: string; replace?: boolean }) => {
@@ -401,13 +435,17 @@ function useRoute(): UseRouteReturn {
 
 provide('use-route-payload', useRoute());
 
-// Expose navigation functions
+// Expose navigation functions and history state
 defineExpose({
   back,
   forward,
   navigate,
   reload,
   clearHistory,
+  historyStack: readonly(historyStack),
+  historyIndex: readonly(historyIndex),
+  canGoBack,
+  canGoForward,
 });
 
 // Match current route and extract params
